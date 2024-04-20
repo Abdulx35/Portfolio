@@ -1,0 +1,162 @@
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class FileSystem {
+    
+    private List<File> files;
+    private List<Directory> directories;
+
+    // Constructor
+    public FileSystem() {
+        files = new ArrayList<>();
+        directories = new ArrayList<>();
+    }
+
+  
+    public void createFile(String name, FileType type) {
+        File file= new File(name, type);
+        files.add(file);
+    }
+
+    
+    public void deleteFile(String name) {
+        File fileToRemove = null;
+        for (File file : files) {
+            if (file.getName().equals(name)) {
+                fileToRemove = file;
+                break;
+            }
+        }
+        if (fileToRemove != null) {
+            files.remove(fileToRemove);
+        }
+    }
+
+   
+    public File getFile(String name) {
+        for (File file : files) {
+            if (file.getName().equals(name)) {
+                return file;
+            }
+        }
+        return null;
+    }
+
+   
+    public void createDirectory(String name) {
+        Directory directory = new Directory(name);
+        directories.add(directory);
+    }
+
+   
+    public void deleteDirectory(String name) {
+        Directory directoryToRemove = null;
+        for (Directory directory : directories) {
+            if (directory.getName().equals(name)) {
+                directoryToRemove = directory;
+                break;
+            }
+        }
+        if (directoryToRemove != null) {
+            directories.remove(directoryToRemove);
+        }
+    }
+
+  
+    public List<File> listFiles() {
+        return files;
+    }
+
+
+    public void renameFile(String oldName, String newName) {
+        File fileToRename = getFile(oldName);
+        if (fileToRename != null) {
+            fileToRename.setName(newName);
+        }
+    }
+
+    
+    public static void main(String[] args) {
+       
+        FileSystem fileSystem = new FileSystem();
+
+     
+        fileSystem.createFile("document.txt", FileType.TEXT);
+        fileSystem.createDirectory("documents");
+
+       
+        List<File> files = fileSystem.listFiles();
+        System.out.println("Files in the file system:");
+        for (File file : files) {
+            System.out.println(file.getName());
+        }
+
+       
+        fileSystem.renameFile("document.txt", "report.txt");
+        System.out.println("\nFiles after renaming:");
+        for (File file : files) {
+            System.out.println(file.getName());
+        }
+
+       
+        fileSystem.deleteFile("report.txt");
+        System.out.println("\nFiles after deletion:");
+        for (File file : files) {
+            System.out.println(file.getName());
+        }
+    }
+}
+
+
+class File {
+    private String name;
+    private FileType type;
+
+    public File(String name, FileType type) {
+        this.name = name;
+        this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public FileType getType() {
+        return type;
+    }
+
+    public void setType(FileType type) {
+        this.type = type;
+    }
+}
+
+
+class Directory {
+    private String name;
+
+    public Directory(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+
+
+enum FileType {
+    TEXT,
+    IMAGE,
+    VIDEO,
+    AUDIO,
+    OTHER
+}
